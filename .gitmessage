@@ -1,0 +1,15 @@
+# type: [feat | fix | refactor | docs | style | test | chroe | perf | ci]
+# scope: Affect area (module)
+# subject: subject
+
+# <type>(<scope>): <subject>
+
+---
+# <body>
+# [add | mod | del | mov] file: <filename>
+#   changes you made
+
+---
+# <footer>
+# Anything not fit in above section.
+# U can draw a ASCII Art here. o(*￣▽￣*)o
