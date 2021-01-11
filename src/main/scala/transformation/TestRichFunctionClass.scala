@@ -27,13 +27,14 @@ object TestRichFunctionClass {
     val result :DataStream[StationLog]= stream.filter(_.callType.equals("success"))
       .map(new MyRichMapFunction)
     result.print()
-    streamEnv.execute()
+    streamEnv.execute("马云珍测试富函数")
   }
   //自定义一个富函数类
   class MyRichMapFunction extends RichMapFunction[StationLog,StationLog]{
     var conn :Connection = _
     var pst :PreparedStatement = _
     override def map(value: StationLog): StationLog = {
+      print(getRuntimeContext.getTaskName)
       //查询主叫号码对应的姓名
       pst.setString(1,value.callOut)
       var result :ResultSet = pst.executeQuery()
@@ -54,7 +55,7 @@ object TestRichFunctionClass {
       conn.close()
     }
     override def open(parameters: Configuration): Unit = {
-      conn = DriverManager.getConnection("jdbc:mysql://localhost/test","root","test1234")
+      conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false","root","test1234")
       pst = conn.prepareStatement("select name from t_phone where phone_number=?")
     }
   }
