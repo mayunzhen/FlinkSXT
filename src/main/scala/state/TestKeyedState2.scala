@@ -27,9 +27,9 @@ object TestKeyedState2 {
     val result :DataStream[(String, Long)] = stream.keyBy(_.callOut)//分组
       //有两种情况，1.状态中有上一次的通话时间，2.没有，采用Scala中的模式匹配
       .mapWithState[(String,Long),StationLog]{
-      case (in:StationLog,None)=>((in.callOut,0),Some(in))//状态值没有值
+      case (in:StationLog,None)=>((in.callOut,0),Some(in))//状态中没有值
       case (in:StationLog,pre:Some[StationLog])=>{
-        var interval = in.callTime -pre.get.callTime
+        var interval = in.callTime - pre.get.callTime
         ((in.callOut,interval),Some(in))
       }
     }.filter(_._2 !=0)
