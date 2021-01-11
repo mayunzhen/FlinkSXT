@@ -44,6 +44,7 @@ object TestKeyedState1 {
       }else{
         //状态中有数据，则计算时间间隔
         var interval = value.callTime - preCallTime
+        preCallTimeState.update(value.callTime)
         out.collect(value.callOut,interval)
       }
     }
