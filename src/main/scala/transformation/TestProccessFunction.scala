@@ -35,7 +35,7 @@ object TestProccessFunction {
     override def processElement(value: StationLog, ctx: KeyedProcessFunction[String, StationLog, String]#Context, out: Collector[String]): Unit = {
       //先从状态中获取时间
       var time = timeState.value()
-      if(time == 0 && value.callType.equals("fail")){//表示第一次发现呼叫失败，记录当前时间
+      if(time == 0 && value.callType.equals("failed")){//表示第一次发现呼叫失败，记录当前时间
       //获取当前系统时间 并注册定时器
         var nowTime = ctx.timerService().currentProcessingTime()
         //定时器在5秒后触发
@@ -44,7 +44,7 @@ object TestProccessFunction {
         //把触发的时间保存到状态中
         timeState.update(onTime)
       }
-      if(time != 0 && !value.callType.equals("fail")){//表示有一次成功的呼叫，必须要删除定时器
+      if(time != 0 && !value.callType.equals("failed")){//表示有一次成功的呼叫，必须要删除定时器
           ctx.timerService().deleteProcessingTimeTimer(time)
         timeState.clear()//清空状态中的时间
       }
